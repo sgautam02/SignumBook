@@ -1,0 +1,198 @@
+
+
+
+
+<mat-toolbar *ngIf="!isUserLoggedIn" class="mat-elevation-z8 " >
+	<a href="/" class="text-white text-decoration-none">SignumBook</a>
+</mat-toolbar>
+
+<div  *ngIf="isUserLoggedIn">
+	<mat-toolbar class="mat-elevation-z8" style="height: 50px;" >
+	  <button
+		mat-icon-button
+		*ngIf="sidenav.mode === 'over'"
+		(click)="sidenav.toggle()"
+	  >
+		<mat-icon *ngIf="!sidenav.opened"> menu </mat-icon>
+		<mat-icon *ngIf="sidenav.opened"> close </mat-icon>
+	  </button>
+	 
+
+	  <a href="/" class="text-white text-decoration-none">SignumBook</a>
+
+	<span class="example-spacer"></span>
+
+	<a href="/profile" class="rounded-pill ps-2 pt-1 pe-3 pb-1 text-white text-decoration-none" *ngIf="isUserLoggedIn">
+		<span class="rounded-circle d-inline-block align-middle centered-bg-image"
+			style="width: 30px; height: 30px; background-color: white; background-image: url('{{profileImage}}');">
+			<!-- <img [src]="profileImge" alt="i"> -->
+		</span>
+		<span class="mat-body-strong d-inline-block align-middle ps-2">{{ authUser?.firstName }}</span>
+		
+	</a>
+	<div *ngIf="isUserLoggedIn">
+		
+		<button mat-icon-button (click)="openSearchDialog()">
+			<mat-icon>search</mat-icon>
+		</button>
+		
+
+		<button mat-icon-button [matMenuTriggerFor]="notificationMenu" (click)="handleUnseenNotifications()">
+			<mat-icon>notifications</mat-icon>
+			<span class="position-absolute translate-middle p-2 bg-danger rounded-circle" style="top: 10px; right: -5px;" *ngIf="hasUnseenNotification"></span>
+		</button>
+		<mat-menu #notificationMenu="matMenu" xPosition="before">
+			<h2 class="mat-h2 m-0 text-center" style="padding: 12px 36px" *ngIf="notifications.length <= 0" (click)="$event.stopPropagation();">No Notification</h2>
+			<h2 class="mat-h2 m-0 text-center" style="padding: 12px 20px 20px 20px;" *ngIf="notifications.length > 0" (click)="$event.stopPropagation();">Notifications</h2>
+
+			<a mat-menu-item *ngFor="let notification of notifications; let last = last;"
+			 href="/posts/{{ notification.owningPost.id }}"
+			 class="border border-1 border-start-0 border-end-0"
+			 [ngClass]="last ? '' : 'border-bottom-0'"
+			 style="height: auto; line-height: 1.6; white-space: normal; font-size: 14px; padding: 16px 20px;">
+			 	<mat-icon color="primary" style="margin-right: 5px;" *ngIf="notification.type === 'POST_LIKE' || notification.type === 'COMMENT_LIKE'">favorite</mat-icon>
+			 	<mat-icon color="primary" style="margin-right: 5px;" *ngIf="notification.type === 'POST_COMMENT'">comment</mat-icon>
+			 	<mat-icon color="primary" style="margin-right: 5px;" *ngIf="notification.type === 'POST_SHARE'">share</mat-icon>
+
+			 	<span class="fw-500" *ngIf="notification.sender">{{ notification.sender.firstName + ' ' + notification.sender.lastName }}</span>
+			 	<span class="fw-500 text-danger" *ngIf="!notification.sender">An App User</span>
+
+				<span *ngIf="notification.type === 'POST_LIKE'">
+					<span *ngIf="notification.owningPost.likeCount > 1">
+						and
+						<span class="fw-500">
+							{{ notification.owningPost.likeCount - 1 }}
+							other
+						</span>
+					</span>
+					 liked your
+					<span *ngIf="notification.owningPost.content">
+						post "{{ notification.owningPost.content | slice:0:44 }}..."
+					</span>
+					<span *ngIf="!notification.owningPost.content">
+						photo
+					</span>
+				</span>
+				
+				<span *ngIf="notification.type === 'POST_COMMENT'">
+					<span *ngIf="notification.owningPost.commentCount > 1">
+						and
+						<span class="fw-500">
+							{{ notification.owningPost.commentCount - 1 }}
+							other
+						</span>
+					</span>
+					commented on your
+					<span *ngIf="notification.owningPost.content">
+						post "{{ notification.owningPost.content | slice:0:24 }}..."
+					</span>
+					<span *ngIf="!notification.owningPost.content">
+						photo
+					</span>
+				</span>
+
+				<span *ngIf="notification.type === 'POST_SHARE'">
+					<span *ngIf="notification.owningPost.shareCount > 1">
+						and
+						<span class="fw-500">
+							{{ notification.owningPost.shareCount - 1 }}
+							other
+						</span>
+					</span>
+					shared your
+					<span *ngIf="notification.owningPost.content">
+						post "{{ notification.owningPost.content | slice:0:24 }}..."
+					</span>
+					<span *ngIf="!notification.owningPost.content">
+						photo
+					</span>
+				</span>
+
+				<span *ngIf="notification.type === 'COMMENT_LIKE'">
+					<span *ngIf="notification.owningComment.likeCount > 1">
+						and
+						<span class="fw-500">
+						{{ notification.owningComment.likeCount - 1	 }}
+							other
+						</span>
+					</span>
+					liked your comment "{{ notification.owningComment.content | slice:0:24 }}..."
+				</span>
+			</a>
+
+			<div (click)="$event.stopPropagation()" class="position-relative ps-3 pe-3">
+				<div class="text-center" *ngIf="hasMoreNotifications" style="margin: 20px 12px 12px 12px;">
+					<button mat-raised-button color="primary" class="rounded-pill align-middle" *ngIf="hasMoreNotifications && !(fetchingResult && resultPage > 1)" (click)="loadNotifications(resultPage)">Load More</button>
+					<div *ngIf="fetchingResult && resultPage > 1" class="d-inline-block" style="margin-top: 3px;">
+						<mat-spinner style="zoom: 0.3; margin: 0 auto;"></mat-spinner>
+					</div>
+				</div>
+			</div>
+		</mat-menu>
+		
+		<button mat-icon-button [matMenuTriggerFor]="mainMenu">
+			<mat-icon>more_vert</mat-icon>
+		</button>
+		<mat-menu #mainMenu="matMenu" xPosition="before">
+			<a mat-menu-item href="/profile">Profile</a>
+			<a mat-menu-item href="/settings">Settings</a>
+			<a mat-menu-item href="/logout">Logout</a>
+		</mat-menu>
+	</div>
+	</mat-toolbar>
+</div>
+  <!-- side bar -->
+	<mat-sidenav-container >
+	  <mat-sidenav  #sidenav="matSidenav" class="mat-elevation-z8">
+		<img class="avatar mat-elevation-z8" [src]="profileImage"/>
+		<h4 class="name">{{authUser?.firstName}} {{authUser?.lastName}}</h4>
+		<!-- <p class="designation">{{authUser?.title}}</p> -->
+		<mat-divider></mat-divider>
+	
+		<button mat-button class="menu-button" routerLink="/"(click)="sidenav.opened=!sidenav.opened">
+		  <mat-icon>home</mat-icon>
+		  <span>Home</span>
+		</button>
+		<button mat-button class="menu-button" routerLink="/profile" (click)="sidenav.opened=!sidenav.opened">
+		  <mat-icon>person</mat-icon>
+		  <span>Profile</span>
+		</button>
+		<button mat-button class="menu-button"  routerLinkActive="active" (click)="openFollowerDialog(authUser)">
+			<mat-icon>bolt</mat-icon>
+			<span>Followrs</span>
+		  </button>
+		<button mat-button class="menu-button" routerLinkActive="active"(click)="openFollowingDialog(authUser)">
+		  <mat-icon>person_add</mat-icon>
+		  <span>Following</span>
+		</button>
+		<button mat-button class="menu-button" routerLink="/chat" (click)="sidenav.opened=!sidenav.opened" >
+			<mat-icon>message</mat-icon>
+			      Message
+		  </button>
+	
+		<mat-divider></mat-divider>
+		<button mat-button class="menu-button" routerLink="/settings" (click)="sidenav.opened=!sidenav.opened" routerLinkActive="active">
+		  <mat-icon>settings</mat-icon>
+		  <span>Setting</span>
+		</button>
+		<button mat-button class="menu-button" routerLinkActive="active">
+		  <mat-icon routerLink="/logout">logout</mat-icon>
+		  
+		</button>
+	  </mat-sidenav>
+	  <mat-sidenav-content style="	background: linear-gradient(#d6d3d3cc,#d6d3d3cc),url('/assets/images/Signumbook.png');
+									background-size: cover;
+									background-attachment: fixed; 
+									padding: 0px !important; 
+									margin: 0px !important;"
+									 >
+		<div>
+			<button mat-fab *ngIf="isUserLoggedIn"  matTooltip="Create New Post" matTooltipPosition="left" class="position-fixed"
+				style="bottom: 30px; left: 30px;  background-color:#004a9f;" (click)="openPostDialog()">
+				<mat-icon>add</mat-icon>
+			</button>
+
+		  <router-outlet ></router-outlet>
+		</div>
+	  </mat-sidenav-content>
+</mat-sidenav-container>

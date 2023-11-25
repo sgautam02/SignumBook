@@ -1,0 +1,205 @@
+<div class="text-center fully-centered" *ngIf="loadingProfile">
+	<mat-spinner style="zoom: 1;" class="text-center ms-auto me-auto"></mat-spinner>
+</div>
+
+<div  *ngIf="!loadingProfile">
+	<div class="container" style="margin: 0px ! ;">
+		<div style="width: 100%; background: white;border-radius:0px 0px 10px 10px ;">
+		<div class="row justify-content-center">
+			<!-- Cover image -->
+			<div class="col-10">
+				<div class="profile-cover-photo centered-bg-image mat-elevation-z5 cursor-pointer" (click)="openViewPhotoDialog(profileUser.coverPhoto)"
+					style="height: 300px; background-image: url('{{coverImge}}'); border-radius:0px 0px 10px 10px ;">
+					<div align="end" class="float-end" style="margin-top: 10px; margin-right: 10px" *ngIf="isProfileViewerOwner" (click)="openPhotoUploadDialog($event, 'coverPhoto')">
+						<button mat-mini-fab color="basic">
+							<mat-icon class="text-secondary">edit</mat-icon>
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		
+		<div class="row justify-content-center">
+			<div class="col-10">
+				<!-- Profile image and details -->
+				<div class=" bg-transparent position-relative p-5  rounded-bottom">
+					<div class="profile-picture centered-bg-image d-inline-block border border-5 border-white rounded-3 cursor-pointer mat-elevation-z3 p-0"  (click)="openViewPhotoDialog(profileUser.profilePhoto)"
+						style="margin-top: -100px; height: 180px; width: 180px; background-color: white; background-image: url('{{profileImge}}');">
+						<div align="end" class="float-end" style="margin-top: -20px; margin-right: -20px" *ngIf="isProfileViewerOwner"  (click)="openPhotoUploadDialog($event, 'profilePhoto')">
+							<button mat-mini-fab color="basic">
+								<mat-icon class="text-secondary">edit</mat-icon>
+							</button>
+						</div>
+					</div>
+
+					<div class="profile-info d-inline-block align-top ps-3" style="margin-top: -30px">
+						<h1 class="mat-display-1 mb-3" style="font-weight: 500;">
+							{{ profileUser.firstName + ' ' + profileUser.lastName }}
+						</h1>
+
+						<p>
+							<a class="text-decoration-none text-secondary mat-h3 cursor-pointer" style="font-weight: 500;" (click)="openFollowingDialog(profileUser)">
+								{{ profileUser.followingCount }} Following
+							</a>
+							<span class="ps-2 pe-2 mat-h3 fw-bold">|</span>
+							<a class="text-decoration-none text-secondary mat-h3 cursor-pointer" style="font-weight: 500;" (click)="openFollowerDialog(profileUser)">
+								{{ profileUser.followerCount }} Follower
+							</a>
+						</p>
+					</div>
+
+					<div style="position: absolute; right: 30px; top: 30px;" *ngIf="!isProfileViewerOwner">
+						<button mat-raised-button color="primary" *ngIf="!viewerFollowsProfileUser" (click)="openFollowConfirmDialog(profileUser.id)">Follow</button>
+						<button mat-raised-button color="warn" *ngIf="viewerFollowsProfileUser" (click)="openUnfollowConfirmDialog(profileUser.id)">Unfollow</button>
+						<button mat-raised-button color="primary" style="margin: 10px;" (click)="openChat(profileUser.id)"><mat-icon>message</mat-icon></button>
+					</div>
+				</div>
+			</div>
+
+			<!-- Profile tabs -->
+			<div class="col-10"  style="background: red;">
+				<div class=" bg-transparent position-relative rounded-bottom">
+					
+				</div>
+			</div>
+		</div>
+		</div>
+
+		<div class="row justify-content-center mt-5">
+			
+			<div class="col-4">
+				<div class="profile-sidebar position-sticky" style="top:64px;">
+					<!-- User Intro -->
+					<mat-card>
+						<mat-card-header>
+						<mat-card-title>
+							Intro
+						</mat-card-title>
+						</mat-card-header>
+					<p class="text-center ps-2 pt-3 pe-2 pb-0" *ngIf="profileUser.intro">
+						{{ profileUser.intro }}
+					</p>
+
+					<mat-list>
+						<div *ngIf="profileUser.email">
+							<mat-list-item>
+								<mat-icon class="text-secondary">email</mat-icon>
+								<span class="fw-500 ps-3 small">Email <b>{{ profileUser.email }}</b></span>
+							</mat-list-item>
+						</div>
+
+						<div *ngIf="profileUser.workplace">
+							<mat-divider></mat-divider>
+
+							<mat-list-item>
+								<mat-icon class="text-secondary">work</mat-icon>
+								<span class="fw-500 ps-3 small">Works At <b>{{ profileUser.workplace }}</b></span>
+							</mat-list-item>
+	
+							<mat-divider></mat-divider>
+						</div>
+
+						<div *ngIf="profileUser.eduInstitution">
+							<mat-list-item>
+								<mat-icon class="text-secondary">school</mat-icon>
+								<span class="fw-500 ps-3 small">Studied At <b>{{ profileUser.eduInstitution }}</b></span>
+							</mat-list-item>
+	
+							<mat-divider></mat-divider>
+						</div>
+
+						<div *ngIf="profileUser.hometown">
+							<mat-list-item *ngIf="profileUser.hometown">
+								<mat-icon class="text-secondary">home</mat-icon>
+								<span class="fw-500 ps-3 small">From <b>{{ profileUser.hometown }}</b></span>
+							</mat-list-item>
+	
+							<mat-divider></mat-divider>
+						</div>
+
+						<div *ngIf="profileUser.currentCity">
+							<mat-list-item>
+								<mat-icon class="text-secondary">person_pin_circle</mat-icon>
+								<span class="fw-500 ps-3 small">Lives In <b>{{ profileUser.currentCity}}</b></span>
+							</mat-list-item>
+	
+							<mat-divider></mat-divider>
+						</div>
+						
+						<div *ngIf="profileUser.country">
+							<mat-list-item>
+								<mat-icon class="text-secondary">place</mat-icon>
+								<span class="fw-500 ps-3 small">Country <b>{{ profileUser.country.name }}</b></span>
+							</mat-list-item>
+	
+							<mat-divider></mat-divider>
+						</div>
+						
+						<div *ngIf="profileUser.gender">
+							<mat-list-item>
+								<mat-icon class="text-secondary"><mat-icon>account_circle</mat-icon></mat-icon>
+								<span class="fw-500 ps-3 small">Gender <b>{{ profileUser.gender }}</b></span>
+							</mat-list-item>
+						</div>
+					</mat-list>
+					</mat-card>
+
+					<!-- User friends -->
+					<mat-card class="mt-2">
+						<mat-card-header>
+							<mat-card-title>Friends</mat-card-title>
+						</mat-card-header>
+						<mat-card-content *ngIf="friendList" >
+							<mat-grid-list cols="2">
+								<mat-grid-tile *ngFor="let f of friendList">
+									<a class="d-inline-block text-decoration-none text-dark align-middle ps-2 fw-500 cursor-pointer"
+												href="/users/{{f.user.id}}">
+										<strong>{{f.user.firstName+' '+f.user.lastName}}</strong>
+										<div class="profile-picture centered-bg-image d-inline-block rounded-3 cursor-pointerp-0" 
+											style=" height: 140px; width: 140px;  background-image: url('{{f.user.profilePhoto}}');">
+									</div>
+									</a>
+								</mat-grid-tile>
+							  </mat-grid-list>
+						</mat-card-content>
+					</mat-card>
+
+					<!-- User Photos -->
+					<mat-card class="mt-2">
+						<mat-card-header>
+							<mat-card-title>Photo's of </mat-card-title>
+						</mat-card-header>
+						<mat-card-content >
+							<mat-grid-list cols="2" *ngIf="profileUserPostResponses">
+								<mat-grid-tile *ngFor="let p of profileUserPostResponses">
+									<a class="d-inline-block text-decoration-none text-dark align-middle ps-2 fw-500 cursor-pointer"
+									href="/posts/{{p.post.id}}">
+										
+										<div class="profile-picture centered-bg-image d-inline-block rounded-3 cursor-pointerp-0" 
+											style=" height: 140px; width: 140px;  background-image: url('{{p.post.img}}');">
+									</div>
+									</a>
+								</mat-grid-tile>
+							  </mat-grid-list>
+						</mat-card-content>
+					</mat-card>
+
+				</div>
+			</div>
+			<!-- User Posts -->
+			<div class="col-6 mb-4">
+				<div class="profile-posts">
+					<app-post *ngFor="let postResponse of profileUserPostResponses" id="{{'profilePost' + postResponse.post.id}}" [postResponse]="postResponse" [isDetailedPost]="false" (postDeletedEvent)="handlePostDeletedEvent($event)"></app-post>
+				</div>
+
+				<div class="text-center mt-3">
+					<button mat-raised-button color="primary" class="mat-btn-lg rounded-pill" *ngIf="hasMoreResult && !fetchingResult" (click)="loadProfilePosts(resultPage)">Load More</button>
+					<mat-spinner style="transform: scale(0.3);" class="text-center ms-auto me-auto" *ngIf="fetchingResult"></mat-spinner>
+					<span class="fw-500" *ngIf="hasNoPost">No Post</span>
+					<span class="fw-500" *ngIf="!hasMoreResult && !hasNoPost">No More Posts</span>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,94 @@
+<div style="display: flex; ">
+    <div class="chats" style="width: 20%; background: white; ">
+        <mat-card style="background: white;">
+            <mat-card-content style="display: flex;justify-content: center; align-items: center;">
+                <mat-form-field  appearance="legacy" style="width: 100%; border-radius: 20px; background-color: #f0f0f0; height: 50px;">
+                    <input matInput placeholder="Search here" style="padding: 4px;">
+                    <mat-icon matPrefix style="color: #555; margin: 0px 10px 0px 10px;">search</mat-icon>
+                </mat-form-field>
+            </mat-card-content>
+            <mat-card-content style=" overflow: auto; height: 488px;">
+                <ul class="list-group list-group-flush" *ngFor="let user of users">
+                    <li class="list-group-item ps-0 pt-2 pe-0 pb-2" (click)="onUserSelected(user.id)">
+                        <span class="rounded-circle d-inline-block align-middle centered-bg-image"
+                            style="width: 30px; height: 30px; background-image: url('{{user.profilePhoto }}');">
+                        </span>
+                        {{user.firstName + ' ' + user.lastName}}
+                    </li>
+                </ul>
+                <div *ngIf="!showUserState" class="scrollarea" >
+                    <div *ngFor="let c of userConversations; let i = index"
+                        (click)="onConversationSelected(i)"
+                        class="p-1  d-flex align-items-center cursor-pointer rounded bg-secondary-subtle">
+                        <div >
+                            <span class="rounded-circle d-inline-block align-middle centered-bg-image"
+                                style="width: 40px; height: 40px; background-image: url('{{c.profilePhoto }}');">
+                            </span>
+                        </div>
+                        <div style=" margin-left: 10px;width: auto;">
+                            
+                            <div style="display: flex; justify-content: space-between; width: 300px;">
+                                <div style="flex: 1;">{{ c.otherUserName }}</div>
+                                <!-- <div style="flex: 1;">{{ c.lastMessageTimestamp.slice(0, 10) + ' ' + c.lastMessageTimestamp.slice(12, 16) }}</div> -->
+                            </div>
+                          
+                            <small class="m-0">{{ c.lastMessage }}</small>
+                        </div>
+                        
+                    </div>
+                </div>
+
+            </mat-card-content>
+        </mat-card>
+    </div>
+    <div *ngIf="selectedConversationId != -1" class="chatroom" style="width: 80%; ">
+        <mat-card-header *ngIf="selectedUser" style=" background: white;" class="pt-2 p-2 pb-0">
+            <div mat-card-avatar class="centered-bg-image"
+                style="background-image: url('{{selectedUser.profilePhoto}}');">
+            </div>
+            <mat-card-title>
+                    <small>{{selectedUser.firstName + ' ' +selectedUser.lastName }}</small>
+            </mat-card-title>
+            <mat-card-subtitle>
+                online
+            </mat-card-subtitle>
+        </mat-card-header>
+        <mat-card *ngIf="selectedUser" style="background: transparent;">
+            <mat-card-content style=" overflow: auto; height: 426px; ">
+                <div class="main-flex-grow scrollarea p-2">
+                    <div *ngFor="let m of selectedConversations" class="mt-2">
+                      <div class="text-white d-flex pt-1 px-2 mw-75 " [ngClass]="currentUser.id == m.senderId ? 'float-end bg-primary-1 ': 'float-start senderText '" style="border-radius: 20px; ">
+                        <div class="fs-6 ms-2 word-break" [ngClass]=" currentUser.id == m.senderId ? 'text-white' : 'text-dark'">
+                            {{ m.message }} 
+                        </div>
+                        <div class="fs-7 ms-2 mt-2 times" [ngClass]="currentUser.id == m.senderId? 'float-end text-white-50': 'float-start text-black-50' ">
+                            {{ m.timestamp | betterDate }}
+                        </div>
+                        </div>
+                        <div *ngIf="currentUser.id == m.senderId">
+                            <mat-icon (click)="onDeleteMessage(m.messageId)" class="bi bi-trash text-danger p-4 cursor-pointer float-end opacity-hover">delete</mat-icon>
+                        </div>
+                    </div>
+                  </div>
+            </mat-card-content>
+            <mat-card-footer>
+                <div style="background: white;">
+                    <form (submit)="onSendMessage()" class="d-flex px-4 py-2 bg-body-secondary">
+                        <input
+                          class="form-control"
+                          type="text"
+                          name="message"
+                          placeholder="Type a message"
+                          [(ngModel)]="message"
+                        />
+                        <button matSuffix mat-icon-button type="submit">
+                          <mat-icon>send</mat-icon>
+                        </button>
+                      </form>
+                  </div>
+            </mat-card-footer>
+        </mat-card>
+        
+</div>
+
+

@@ -1,0 +1,145 @@
+.example-spacer {
+	flex: 1 1 auto;
+}
+   mat-toolbar {
+    background: #004a9f;
+    color: white;
+  }
+  
+  mat-sidenav {
+    margin: 16px;
+    width: 200px;
+    border-right: none;
+    background: #004a9f;
+    color: white;
+    border-radius: 10px;
+    padding: 16px;
+    text-align: center;
+  }
+  
+  .content {
+    height: calc(100vh - 130px);
+    border-radius: 10px;
+    margin: 16px;
+    margin-left: 32px;
+  
+    padding: 16px;
+  
+    overflow: auto;
+  }
+  
+  mat-sidenav-container {
+    height: calc(100vh - 65px);
+  }
+  
+  .menu-button {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    font-size: 1rem;
+  
+    mat-icon {
+      margin-right: 8px;
+    }
+  }
+  
+  .avatar {
+    margin-top: 16px;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+  }
+  
+  .name {
+    margin-top: 8px;
+    font-weight: normal;
+  }
+  
+  .designation {
+    margin-top: 2px;
+    font-size: 0.7rem;
+    color: lightgrey;
+  }
+  
+  mat-divider {
+    margin-top: 16px;
+    margin-bottom: 16px;
+    background-color: rgba(255, 255, 255, 0.5);
+  }
+
+  .search-bar {
+    background-color: #ffffff;
+    height: 20px;
+    border-radius: 10px;
+    display: flex;
+    padding-top: 20px;
+    width: 200px;
+    align-items: center;
+    overflow: hidden;
+}
+.example-form {
+    width: 180px;
+    background: #ffffff;
+    outline: none;
+    border-style: none;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+   
+}
+.search-icon{
+    color: #004a9f; 
+    margin-left: 5px; 
+    padding-right: 5px; 
+    padding-bottom:15px ;
+}
+.avtar{
+    margin-top: 10px;
+    
+}
+.btn{
+    background-color: navy;
+    text-transform: uppercase;
+    margin-left: 8px;
+}
+
+.searchbar {
+  margin-bottom: auto;
+  margin-top: auto;
+  height: 40px;
+  background-color: #353b48;
+  border-radius: 30px;
+  padding: 10px;
+}
+.search_input {
+  color: white;
+  border: 0;
+  outline: 0;
+  background: none;
+  width: 0;
+  caret-color: transparent;
+  line-height: 40px;
+  transition: width 0.4s linear;
+}
+.searchbar:hover > .search_input {
+  padding: 0 10px;
+  width: 320px;
+  caret-color: red;
+  transition: width 0.4s linear;
+}
+.searchbar:hover > .search_icon {
+  background: white;
+  color: #e74c3c;
+}
+.search_icon {
+  height: 20px;
+  width: 20px;
+  float: right;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10%;
+  color: white;
+  text-decoration: none;
+}

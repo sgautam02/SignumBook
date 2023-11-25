@@ -1,0 +1,16 @@
+-------------------------------------------------------------------------------
+Test set: com.signumapp.service.UserServiceTest
+-------------------------------------------------------------------------------
+Tests run: 19, Failures: 2, Errors: 0, Skipped: 0, Time elapsed: 0.228 s <<< FAILURE! - in com.signumapp.service.UserServiceTest
+shouldChangeCoverPhoto_whenCoverPhotoIsGiven  Time elapsed: 0.014 s  <<< FAILURE!
+java.lang.AssertionError: 
+
+Expecting actual not to be null
+	at com.signumapp.service.UserServiceTest.shouldChangeCoverPhoto_whenCoverPhotoIsGiven(UserServiceTest.java:322)
+
+shouldChangeProfilePhoto_whenProfilePhotoIsGiven  Time elapsed: 0.013 s  <<< FAILURE!
+java.lang.AssertionError: 
+
+Expecting actual not to be null
+	at com.signumapp.service.UserServiceTest.shouldChangeProfilePhoto_whenProfilePhotoIsGiven(UserServiceTest.java:292)
+

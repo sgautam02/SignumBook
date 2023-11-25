@@ -1,0 +1,64 @@
+
+
+<div *ngIf="selectedConversationId != -1" class="chatroom">
+    <div style="display: flex; justify-content: space-between;">
+        <mat-card-header *ngIf="receiver" style=" background: white;" class="pt-2 p-2 pb-0">
+            <div mat-card-avatar class="centered-bg-image"
+                style="background-image: url('{{receiver.profilePhoto}}');">
+            </div>
+            <mat-card-title>
+                    <small>{{receiver.firstName + ' ' +receiver.lastName }}</small>
+            </mat-card-title>
+            <mat-card-subtitle>
+                online
+            </mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-header style=" background: white;" class="pt-2 p-2 pb-0">
+            <button mat-icon-button aria-label="Example icon button with a vertical three dot icon">
+                <mat-icon>phone</mat-icon>
+              </button>
+              <button mat-icon-button aria-label="Example icon button with a vertical three dot icon">
+                <mat-icon>videocam</mat-icon>
+              </button>
+        </mat-card-header>
+    </div>
+    <mat-card *ngIf="receiver" style="background: transparent;">
+        <mat-card-content style=" overflow: auto; height: 426px; ">
+            <div class="main-flex-grow scrollarea p-2">
+                <div *ngFor="let m of selectedConversation" class="mt-2">
+                  <div class="text-white  py-1 px-2 mw-75 " [ngClass]="authUser.id == m.senderId ? 'float-end bg-primary ': 'float-start bg-secondary '" style="border-radius: 20px; ">
+                    <div class="fs-10 word-break"[ngClass]="authUser.id == m.senderId ? 'text-white' : 'text-dark'">
+                      {{ m.message }}
+                    </div>
+                    <div class="fs-7"[ngClass]="authUser.id == m.senderId? 'float-end text-white-30' : 'float-start text-black-30'">
+                      <!-- <small>{{ m.timestamp  }} </small> -->
+                    </div>
+                  </div>
+                 
+                  <div *ngIf="authUser.id == m.senderId">
+                    <!-- <mat-icon (click)="onDeleteMessage(m.messageId)" class="bi bi-trash text-danger p-4 cursor-pointer float-end opacity-hover">delete</mat-icon> -->
+                  </div>
+                </div>
+              </div>
+        </mat-card-content>
+        <mat-card-footer>
+            <div>
+                <form (submit)="onSendMessage()">
+                  <div class="d-flex px-4 py-2 bg-body-secondary">
+                    <input
+                      class="form-control"
+                      type="text"
+                      name="message"
+                      placeholder="Type a message"
+                      [(ngModel)]="message"
+                    />
+                    
+                    <button type="submit" class="btn  ms-1 h-2" >
+                      <mat-icon>send</mat-icon>
+                    </button>
+                  </div>
+                </form>
+              </div>
+        </mat-card-footer>
+    </mat-card>
+
